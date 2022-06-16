@@ -28,6 +28,8 @@ public class TradingStrategyTest {
     @Before
     public void init() {
         tradingStrategy = new TradingStrategy(tradeExecutionService);
+        tradingStrategy.setBuyThreshold("IBM", 55.0);
+        tradingStrategy.setSellThreshold("IBM", 550.0);
     }
 
     @Test
@@ -45,5 +47,24 @@ public class TradingStrategyTest {
         SecurityDTO input = new SecurityDTO("APPLE", 50.00, 10);
         tradingStrategy.autoBuy(input);
         verifyZeroInteractions(tradeExecutionService);
+    }
+
+    @Test
+    public void testBuyThreshold() {
+        assertThat(tradingStrategy.getBuyThresholds()).hasSize(1);
+    }
+
+    @Test
+    public void testSellThreshold() {
+        assertThat(tradingStrategy.getSellThresholds()).hasSize(1);
+    }
+
+    @Test
+    public void testClearAllThreshold() {
+        tradingStrategy.clearThresholds();
+        assertThat(tradingStrategy.getBuyThresholds()).hasSize(0);
+        assertThat(tradingStrategy.getSellThresholds()).hasSize(0);
+
+
     }
 }
