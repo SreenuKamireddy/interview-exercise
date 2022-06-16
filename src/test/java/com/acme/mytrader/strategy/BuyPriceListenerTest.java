@@ -6,6 +6,8 @@ import static org.mockito.Mockito.verify;
 
 import com.acme.mytrader.execution.ExecutionService;
 import com.acme.mytrader.price.BuyPriceListener;
+import com.acme.mytrader.price.PriceListener;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -16,14 +18,18 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class BuyPriceListenerTest {
 
+    BuyPriceListener buyPriceListener;
     @Mock
     ExecutionService executionService;
 
+    @Before
+    public void init() {
+        buyPriceListener = new BuyPriceListener("IBM", 50.00, 100, executionService,
+                false);
+    }
+
     @Test
     public void testInitializeStateForBuyPriceListener() {
-
-        BuyPriceListener buyPriceListener = new BuyPriceListener("IBM", 50.00, 100, executionService,
-                false);
 
         assertThat(buyPriceListener.getSecurity()).isEqualTo("IBM");
         assertThat(buyPriceListener.getTriggerLevel()).isEqualTo(50.00);
@@ -38,8 +44,6 @@ public class BuyPriceListenerTest {
         ArgumentCaptor<Double> acDouble = ArgumentCaptor.forClass(Double.class);
         ArgumentCaptor<Integer> acInteger = ArgumentCaptor.forClass(Integer.class);
 
-        BuyPriceListener buyPriceListener = new BuyPriceListener("IBM", 50.00, 100, executionService,
-                false);
         buyPriceListener.priceUpdate("IBM", 25.00);
 
         verify(executionService, times(1))
@@ -60,8 +64,7 @@ public class BuyPriceListenerTest {
         ArgumentCaptor<Double> acDouble = ArgumentCaptor.forClass(Double.class);
         ArgumentCaptor<Integer> acInteger = ArgumentCaptor.forClass(Integer.class);
 
-        BuyPriceListener buyPriceListener = new BuyPriceListener("IBM", 50.00, 100, executionService,
-                false);
+
         buyPriceListener.priceUpdate("IBM", 55.00);
 
         verify(executionService, times(0))
@@ -77,8 +80,7 @@ public class BuyPriceListenerTest {
         ArgumentCaptor<Double> acDouble = ArgumentCaptor.forClass(Double.class);
         ArgumentCaptor<Integer> acInteger = ArgumentCaptor.forClass(Integer.class);
 
-        BuyPriceListener buyPriceListener = new BuyPriceListener("APPL", 50.00, 100, executionService,
-                false);
+
         buyPriceListener.priceUpdate("IBM", 55.00);
 
         verify(executionService, times(0))
@@ -94,8 +96,6 @@ public class BuyPriceListenerTest {
         ArgumentCaptor<Double> acDouble = ArgumentCaptor.forClass(Double.class);
         ArgumentCaptor<Integer> acInteger = ArgumentCaptor.forClass(Integer.class);
 
-        BuyPriceListener buyPriceListener = new BuyPriceListener("IBM", 50.00, 100, executionService,
-                false);
         buyPriceListener.priceUpdate("IBM", 25.00);
         buyPriceListener.priceUpdate("IBM", 10.00);
         buyPriceListener.priceUpdate("IBM", 35.00);
